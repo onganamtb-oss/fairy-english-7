@@ -1,26 +1,348 @@
+
 <!DOCTYPE html>
-<html lang="vi"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Fairy English 7</title>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Fairy English 7 - Vương quốc tiếng Anh</title>
 <style>
-:root{--p:#7653b5;--bg:#f5f0ff;--ink:#30234b}*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--bg);color:var(--ink)}header{background:linear-gradient(135deg,#7653b5,#b18be8);color:white;text-align:center;padding:24px 12px}main{max-width:720px;margin:auto;padding:14px}.card{background:white;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 4px 16px #30234b12}button{border:0;border-radius:12px;padding:12px 15px;background:var(--p);color:white;font-size:16px;margin:5px;cursor:pointer}.option{display:block;width:100%;text-align:left;background:#eee8fa;color:var(--ink)}.topic{background:#eee8fa;color:var(--ink)}.muted{color:#715c91}
-</style></head><body>
-<header><h1>🧚 Fairy English 7</h1><p>Học tiếng Anh cùng nàng tiên!</p><b>⭐ XP: <span id="xp">0</span>　🪙 Xu: <span id="coins">0</span></b></header>
+:root{--ink:#3c315b;--purple:#7856b8;--gold:#ffcf69;--paper:#fff9e9;--green:#438b68}
+*{box-sizing:border-box}
+body{margin:0;font-family:system-ui,-apple-system,sans-serif;color:var(--ink);background:linear-gradient(#d9f4ff,#f4e8ff 55%,#fff0d5);min-height:100vh}
+header{text-align:center;padding:22px 12px 16px;background:linear-gradient(135deg,#7652b6,#a76cbd);color:white;border-radius:0 0 28px 28px}
+header h1{font-size:clamp(25px,6vw,38px);margin:4px}
+header p{margin:7px;font-size:14px}
+.stats{display:flex;justify-content:center;gap:9px;flex-wrap:wrap;margin-top:14px}
+.stat{background:#ffffff25;border:1px solid #ffffff55;border-radius:14px;padding:8px 12px;font-weight:700}
+main{max-width:900px;margin:auto;padding:14px}
+.panel{background:#ffffffdc;border:2px solid #fff;border-radius:22px;padding:16px;margin:14px 0;box-shadow:0 5px 15px #49376b13}
+h2{margin:0 0 10px;font-size:21px}
+h3{margin:5px 0}
+.muted{color:#766c8b;font-size:13px}
+.map{position:relative;padding:10px 0}
+.path{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.node{position:relative;text-align:left;border:2px solid #e6d9ff;background:linear-gradient(150deg,#fff,#f4edff);border-radius:18px;padding:13px 11px;min-height:104px;color:var(--ink);cursor:pointer;box-shadow:0 3px 0 #d9c8f2;transition:transform .15s}
+.node:active{transform:scale(.98)}
+.node .emoji{font-size:27px;display:block;margin-bottom:5px}
+.node strong{display:block;font-size:14px}
+.node small{display:block;color:#796b94;margin-top:5px;line-height:1.4}
+.node.review{background:#fff8d9;border-color:#f5d77c;box-shadow:0 3px 0 #e9d38c}
+.node.boss{background:linear-gradient(135deg,#592c74,#a74779);border-color:#e8a2c8;color:white;box-shadow:0 3px 0 #6d315f}
+.node.boss small{color:#ffe2ef}
+.node.done{border-color:#76cba1;background:#e9fff2;box-shadow:0 3px 0 #9bdab8}
+.node.locked{opacity:.62}
+button{font:inherit}
+.btn{border:0;border-radius:12px;padding:11px 15px;background:var(--purple);color:white;font-weight:700;cursor:pointer;margin:4px 3px 4px 0}
+.btn.secondary{background:#eee6fc;color:#4c3679}
+.btn.gold{background:#e9ac32;color:#392a50}
+.btn.green{background:var(--green)}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.progressbar{height:10px;background:#e8def8;border-radius:20px;overflow:hidden;margin:10px 0}
+.progressbar div{height:100%;background:linear-gradient(90deg,#8d62d3,#5ac49b);width:0}
+#screen{display:none}
+.word{padding:12px 0;border-bottom:1px solid #eee6fa}
+.word:last-child{border-bottom:0}
+.word strong{font-size:17px}
+.example{font-size:14px;margin-top:4px}
+.translation{color:#766b8c;font-size:14px}
+.option{display:block;width:100%;text-align:left;background:#f6f1ff;border:2px solid #e4d8f9;border-radius:13px;padding:12px;margin:8px 0;color:var(--ink);cursor:pointer}
+.option:disabled{cursor:default}
+.option.correct{background:#dcf9e6;border-color:#59b87c}
+.option.wrong{background:#ffe5e7;border-color:#e57d88}
+#feedback{font-weight:700;min-height:25px;margin:10px 0}
+footer{text-align:center;padding:20px;font-size:12px;color:#74668b}
+.badge{display:inline-block;border-radius:20px;background:#f5e9ff;padding:5px 9px;font-size:12px;margin:2px}
+@media(min-width:620px){.path{grid-template-columns:repeat(3,minmax(0,1fr))}.panel{padding:22px}}
+</style>
+</head>
+<body>
+<header>
+  <div style="font-size:35px">🧚🏻‍♀️ ✨ 🏰</div>
+  <h1>Fairy English 7</h1>
+  <p>Vương quốc tiếng Anh · Global Success</p>
+  <div class="stats">
+    <div class="stat">⭐ XP: <span id="xp">0</span></div>
+    <div class="stat">🪙 Xu: <span id="coins">0</span></div>
+    <div class="stat">🏅 <span id="rank">Tân thủ</span></div>
+  </div>
+</header>
+
 <main>
-<section class="card"><h2>🏰 Chọn vùng khám phá</h2><p class="muted">Học từ mới, nghe phát âm và hoàn thành thử thách.</p><button class="topic" onclick="start(0)">🍽️ Food and Drink</button><button class="topic" onclick="start(1)">🏠 My Home</button><button class="topic" onclick="start(2)">🎒 School</button></section>
-<section class="card" id="game"><h2>✨ Nhiệm vụ đầu tiên</h2><p>Chọn một chủ đề để bắt đầu hành trình phép thuật!</p><button onclick="start(0)">Bắt đầu học</button></section>
-<section class="card"><h3>🎒 Túi đồ phép thuật</h3><p id="rank">Danh hiệu: Người học mới 🌱</p><p id="items">Tích lũy 40 XP để mở khóa đôi cánh tiên!</p><h3>📚 Ôn tập từ đã học</h3><p id="review">Bạn chưa có từ nào cần ôn.</p></section>
+<section id="home">
+  <div class="panel">
+    <h2>🌈 Hành trình của bạn</h2>
+    <div class="muted">Học từ vựng, vượt thử thách và giải cứu vương quốc!</div>
+    <div class="progressbar"><div id="progress"></div></div>
+    <div class="muted" id="progressText">0 / 18 chặng đã hoàn thành</div>
+    <p><span class="badge">📖 Từ vựng</span><span class="badge">🔊 Phát âm</span><span class="badge">🎯 Trắc nghiệm</span><span class="badge">🐉 Boss Battle</span></p>
+  </div>
+  <div class="panel">
+    <h2>🗺️ Bản đồ cổ tích</h2>
+    <p class="muted">Chọn một chặng để bắt đầu. Hai trận chiến là bài kiểm tra giữa kỳ và cuối kỳ.</p>
+    <div class="map"><div class="path" id="map"></div></div>
+  </div>
+  <div class="panel">
+    <h2>🎒 Kho báu của bạn</h2>
+    <div id="inventory">Chưa có vật phẩm. Hãy hoàn thành bài học để nhận xu!</div>
+    <button class="btn secondary" onclick="resetGame()">Đặt lại tiến trình</button>
+  </div>
+</section>
+
+<section id="screen">
+  <div class="panel">
+    <button class="btn secondary" onclick="goHome()">← Bản đồ</button>
+    <div id="lessonIcon" style="font-size:38px;margin-top:10px">📚</div>
+    <h2 id="lessonTitle">Bài học</h2>
+    <p id="lessonDesc" class="muted"></p>
+    <div id="lessonContent"></div>
+    <div id="quizArea" style="display:none">
+      <hr style="border:0;border-top:1px solid #eadff8;margin:18px 0">
+      <h3 id="quizTitle">🎯 Thử thách</h3>
+      <div id="question"></div>
+      <div id="options"></div>
+      <div id="feedback" aria-live="polite"></div>
+      <button id="nextBtn" class="btn" style="display:none" onclick="nextQuestion()">Câu tiếp theo →</button>
+      <div id="result" style="display:none"></div>
+    </div>
+    <div id="lessonActions">
+      <button class="btn gold" onclick="startQuiz()">Bắt đầu thử thách →</button>
+    </div>
+  </div>
+</section>
 </main>
+<footer>Fairy English 7 · Học vui mỗi ngày ✨<br>Tiến trình được lưu trên trình duyệt của thiết bị này.</footer>
+
 <script>
-const words=[
-[{en:"vegetable",vi:"rau củ",ex:"I eat vegetables every day.",q:"Vegetable nghĩa là gì?",a:["Rau củ","Thịt","Nước"],c:0},{en:"delicious",vi:"ngon",ex:"This soup is delicious.",q:"Delicious nghĩa là gì?",a:["Đắt tiền","Ngon","Lạnh"],c:1},{en:"noodles",vi:"mì",ex:"I would like a bowl of noodles.",q:"Noodles nghĩa là gì?",a:["Cơm","Bánh mì","Mì"],c:2}],
-[{en:"bedroom",vi:"phòng ngủ",ex:"My bedroom is small.",q:"Bedroom nghĩa là gì?",a:["Phòng khách","Phòng ngủ","Nhà bếp"],c:1},{en:"comfortable",vi:"thoải mái",ex:"This chair is comfortable.",q:"Comfortable nghĩa là gì?",a:["Thoải mái","Ồn ào","Bẩn"],c:0}],
-[{en:"library",vi:"thư viện",ex:"I read books in the library.",q:"Library nghĩa là gì?",a:["Sân chơi","Nhà ăn","Thư viện"],c:2},{en:"uniform",vi:"đồng phục",ex:"We wear a school uniform.",q:"Uniform nghĩa là gì?",a:["Đồng phục","Bài tập","Bút chì"],c:0}]
+const units = [
+ {name:"Unit 1: Hobbies",vi:"Sở thích",icon:"🎨",words:[
+  ["hobby","sở thích","My hobby is drawing.","Sở thích của tôi là vẽ."],
+  ["collect","sưu tầm","I collect old coins.","Tôi sưu tầm tiền xu cũ."],
+  ["amazing","tuyệt vời","This hobby is amazing.","Sở thích này thật tuyệt vời."]]},
+ {name:"Unit 2: Healthy Living",vi:"Sống khỏe",icon:"🍎",words:[
+  ["healthy","khỏe mạnh","Fruit is healthy.","Trái cây tốt cho sức khỏe."],
+  ["exercise","tập thể dục","I exercise every day.","Tôi tập thể dục mỗi ngày."],
+  ["avoid","tránh","Avoid eating too much sugar.","Tránh ăn quá nhiều đường."]]},
+ {name:"Unit 3: Community Service",vi:"Hoạt động cộng đồng",icon:"🤝",words:[
+  ["volunteer","tình nguyện viên","I am a volunteer.","Tôi là tình nguyện viên."],
+  ["donate","quyên góp","We donate books.","Chúng tôi quyên góp sách."],
+  ["homeless","vô gia cư","We help homeless people.","Chúng tôi giúp người vô gia cư."]]},
+ {name:"Unit 4: Music and Arts",vi:"Âm nhạc và nghệ thuật",icon:"🎵",words:[
+  ["musician","nhạc sĩ","She is a musician.","Cô ấy là nhạc sĩ."],
+  ["painting","bức tranh","I like this painting.","Tôi thích bức tranh này."],
+  ["concert","buổi hòa nhạc","We went to a concert.","Chúng tôi đã đi xem hòa nhạc."]]},
+ {name:"Unit 5: Food and Drink",vi:"Đồ ăn và thức uống",icon:"🍜",words:[
+  ["ingredient","nguyên liệu","Rice is an important ingredient.","Gạo là một nguyên liệu quan trọng."],
+  ["delicious","ngon","The soup is delicious.","Món súp rất ngon."],
+  ["lemonade","nước chanh","I would like some lemonade.","Tôi muốn uống một ít nước chanh."]]},
+ {name:"Unit 6: A Visit to a School",vi:"Thăm một ngôi trường",icon:"🏫",words:[
+  ["entrance","lối vào","Meet me at the entrance.","Hãy gặp tôi ở lối vào."],
+  ["library","thư viện","Our library is large.","Thư viện của chúng tôi rộng."],
+  ["equipment","thiết bị","The school has new equipment.","Trường có thiết bị mới."]]},
+ {name:"Unit 7: Traffic",vi:"Giao thông",icon:"🚦",words:[
+  ["traffic","giao thông","Traffic is heavy today.","Hôm nay giao thông đông đúc."],
+  ["helmet","mũ bảo hiểm","Always wear a helmet.","Luôn đội mũ bảo hiểm."],
+  ["crossing","chỗ sang đường","Use the pedestrian crossing.","Hãy sử dụng vạch sang đường."]]},
+ {name:"Unit 8: Films",vi:"Phim ảnh",icon:"🎬",words:[
+  ["comedy","phim hài","I enjoy watching comedies.","Tôi thích xem phim hài."],
+  ["character","nhân vật","My favourite character is funny.","Nhân vật yêu thích của tôi rất hài hước."],
+  ["review","bài đánh giá","I read a film review.","Tôi đọc một bài đánh giá phim."]]},
+ {name:"Unit 9: Festivals Around the World",vi:"Lễ hội thế giới",icon:"🎉",words:[
+  ["festival","lễ hội","The festival is exciting.","Lễ hội rất thú vị."],
+  ["celebrate","kỷ niệm, ăn mừng","We celebrate together.","Chúng tôi cùng nhau ăn mừng."],
+  ["costume","trang phục","She wears a traditional costume.","Cô ấy mặc trang phục truyền thống."]]},
+ {name:"Unit 10: Energy Sources",vi:"Nguồn năng lượng",icon:"⚡",words:[
+  ["energy","năng lượng","We need energy to live.","Chúng ta cần năng lượng để sống."],
+  ["renewable","có thể tái tạo","Solar power is renewable.","Năng lượng mặt trời có thể tái tạo."],
+  ["pollution","ô nhiễm","Air pollution is dangerous.","Ô nhiễm không khí rất nguy hiểm."]]},
+ {name:"Unit 11: Travelling in the Future",vi:"Du lịch tương lai",icon:"🚀",words:[
+  ["vehicle","phương tiện","This vehicle is electric.","Phương tiện này chạy bằng điện."],
+  ["comfortable","thoải mái","The seats are comfortable.","Những chiếc ghế rất thoải mái."],
+  ["pilotless","không người lái","A pilotless plane can fly automatically.","Máy bay không người lái có thể tự bay."]]},
+ {name:"Unit 12: English-Speaking Countries",vi:"Các quốc gia nói tiếng Anh",icon:"🌍",words:[
+  ["capital","thủ đô","Canberra is Australia's capital.","Canberra là thủ đô của Úc."],
+  ["landmark","địa danh nổi tiếng","This landmark is famous.","Địa danh này nổi tiếng."],
+  ["language","ngôn ngữ","English is an international language.","Tiếng Anh là ngôn ngữ quốc tế."]]}
 ];
-let xp=Number(localStorage.getItem("fairyXP")||0),coins=Number(localStorage.getItem("fairyCoins")||0),idx=0,topic=0,missed=JSON.parse(localStorage.getItem("fairyMissed")||"[]");
-function update(){document.getElementById("xp").textContent=xp;document.getElementById("coins").textContent=coins;document.getElementById("rank").textContent="Danh hiệu: "+(xp>=100?"Pháp sư tiếng Anh 🧙":xp>=40?"Học trò phép thuật ✨":"Người học mới 🌱");document.getElementById("items").textContent=xp>=40?"🪽 Đã mở khóa đôi cánh tiên!":"Tích lũy 40 XP để mở khóa đôi cánh tiên!";document.getElementById("review").textContent=missed.length?missed.join(", "):"Bạn chưa có từ nào cần ôn.";localStorage.setItem("fairyXP",xp);localStorage.setItem("fairyCoins",coins);localStorage.setItem("fairyMissed",JSON.stringify(missed))}
-function speak(t){if(!("speechSynthesis" in window)){alert("Trình duyệt chưa hỗ trợ phát âm.");return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.82;speechSynthesis.speak(u)}
-function start(t){topic=t;idx=0;showWord()}
-function showWord(){let w=words[topic][idx%words[topic].length];document.getElementById("game").innerHTML="<h2>✨ Từ mới "+(idx+1)+"</h2><h1>"+w.en+"</h1><p>🇻🇳 Nghĩa: "+w.vi+"</p><p>Ví dụ: "+w.ex+"</p>"+'<button onclick="speak(\''+w.en+'\')">🔊 Nghe từ</button>'+'<button onclick="speak(\''+w.ex+'\')">🗣️ Nghe câu</button>'+'<button onclick="quiz()">Làm câu hỏi ➜</button>'}
-function quiz(){let w=words[topic][idx%words[topic].length],html="<h2>🧩 Thử thách</h2><p>"+w.q+"</p>";w.a.forEach((a,i)=>html+='<button class="option" onclick="answer('+i+')">'+a+"</button>");document.getElementById("game").innerHTML=html}
-function answer(i){let w=words[topic][idx%words[topic].length];if(i===w.c){xp+=10;coins+=5;missed=missed.filter(x=>x!==w.en);update();document.getElementById("game").innerHTML="<h2>🎉 Chính xác!</h2><p>+10 XP và +5 xu</p><button onclick='next()'>Tiếp tục ➜</button>"}else{if(!missed.includes(w.en))missed.push(w.en);update();document.getElementById("game").innerHTML="<h2>🌱 Cố gắng nhé!</h2><p>Đáp án đúng: "+w.a[w.c]+"</p><button onclick='quiz()'>Thử lại</button><button onclick='next()'>Học từ tiếp theo</button>"}}
-function next(){idx++;showWord()}update();
-</script></body></html>
+
+const stages = [
+ {id:"grade6",name:"Review: Grade 6",vi:"Ôn tập lớp 6",icon:"🏰",type:"review",desc:"Ôn lại kiến thức nền tảng."},
+ ...units.map((u,i)=>({id:"u"+(i+1),name:u.name,vi:u.vi,icon:u.icon,type:"unit",unit:i,desc:"Học từ vựng và luyện tập."})),
+ {id:"r1",name:"Review 1",vi:"Ôn Unit 1–3",icon:"📘",type:"review",desc:"Ôn tập Unit 1 đến Unit 3.",range:[0,3]},
+ {id:"r2",name:"Review 2",vi:"Ôn Unit 4–6",icon:"📗",type:"review",desc:"Ôn tập Unit 4 đến Unit 6.",range:[3,6]},
+ {id:"mid",name:"MIDTERM BATTLE",vi:"Trận chiến giữa kỳ",icon:"🐉",type:"boss",desc:"Đánh bại quái vật bằng kiến thức Unit 1–6.",range:[0,6]},
+ {id:"r3",name:"Review 3",vi:"Ôn Unit 7–9",icon:"📙",type:"review",desc:"Ôn tập Unit 7 đến Unit 9.",range:[6,9]},
+ {id:"r4",name:"Review 4",vi:"Ôn Unit 10–12",icon:"📕",type:"review",desc:"Ôn tập Unit 10 đến Unit 12.",range:[9,12]},
+ {id:"final",name:"FINAL BATTLE",vi:"Trận chiến cuối kỳ",icon:"👑",type:"boss",desc:"Thử thách cuối cùng: Unit 7–12.",range:[6,12]}
+];
+
+const reviewWords = [
+ ["friend","bạn bè","My friend is kind.","Bạn tôi rất tốt bụng."],
+ ["school","trường học","I go to school.","Tôi đi học."],
+ ["beautiful","đẹp","It is a beautiful day.","Đó là một ngày đẹp trời."],
+ ["important","quan trọng","English is important.","Tiếng Anh rất quan trọng."],
+ ["environment","môi trường","We protect the environment.","Chúng ta bảo vệ môi trường."]
+];
+
+let saved;
+try { saved=JSON.parse(localStorage.getItem("fairy7save")||"{}"); } catch(e) { saved={}; }
+let state={xp:saved.xp||0,coins:saved.coins||0,done:saved.done||[],inventory:saved.inventory||[]};
+let currentStage=null, questions=[], qIndex=0, score=0, answered=false;
+
+function save(){
+ try{localStorage.setItem("fairy7save",JSON.stringify(state));}catch(e){}
+ updateStats();
+}
+function rank(){
+ if(state.xp>=1000)return "Pháp sư";
+ if(state.xp>=500)return "Hiệp sĩ";
+ if(state.xp>=200)return "Nhà thám hiểm";
+ if(state.xp>=50)return "Học viên";
+ return "Tân thủ";
+}
+function updateStats(){
+ document.getElementById("xp").textContent=state.xp;
+ document.getElementById("coins").textContent=state.coins;
+ document.getElementById("rank").textContent=rank();
+ document.getElementById("progress").style.width=(state.done.length/stages.length*100)+"%";
+ document.getElementById("progressText").textContent=state.done.length+" / "+stages.length+" chặng đã hoàn thành";
+ document.getElementById("inventory").textContent=state.inventory.length?state.inventory.join(" · "):"Chưa có vật phẩm. Hãy hoàn thành bài học để nhận xu!";
+}
+function renderMap(){
+ const map=document.getElementById("map"); map.innerHTML="";
+ stages.forEach((s,i)=>{
+  const b=document.createElement("button");
+  b.className="node "+(s.type==="boss"?"boss":s.type==="review"?"review":"")+(state.done.includes(s.id)?" done":"");
+  b.innerHTML='<span class="emoji">'+s.icon+'</span><strong>'+s.name+'</strong><small>'+s.vi+(state.done.includes(s.id)?" · ✓ Hoàn thành":"")+'</small>';
+  b.onclick=()=>openStage(s);
+  map.appendChild(b);
+ });
+ updateStats();
+}
+function goHome(){
+ document.getElementById("home").style.display="block";
+ document.getElementById("screen").style.display="none";
+ renderMap();
+}
+function openStage(s){
+ currentStage=s;
+ document.getElementById("home").style.display="none";
+ document.getElementById("screen").style.display="block";
+ document.getElementById("lessonIcon").textContent=s.icon;
+ document.getElementById("lessonTitle").textContent=s.name+" — "+s.vi;
+ document.getElementById("lessonDesc").textContent=s.desc;
+ document.getElementById("quizArea").style.display="none";
+ document.getElementById("lessonActions").style.display="block";
+ document.getElementById("lessonContent").style.display="block";
+ const content=document.getElementById("lessonContent");
+ content.innerHTML="";
+ if(s.type==="unit"){
+  const u=units[s.unit];
+  content.innerHTML="<h3>📚 Từ vựng cần nhớ</h3>";
+  u.words.forEach(w=>content.appendChild(makeWord(w)));
+ }else{
+  content.innerHTML="<h3>"+(s.type==="boss"?"⚔️ Luật chơi trận chiến":"🧭 Nội dung ôn tập")+"</h3><p>"+(s.type==="boss"?"Trả lời 10 câu hỏi. Mỗi câu đúng gây sát thương lên quái vật. Đạt ít nhất 70% để nhận chiến thắng!":"Luyện tập từ vựng và kiến thức đã học. Trả lời câu hỏi để nhận XP và xu.")+"</p>";
+  if(s.range){
+   const all=getWords(s);
+   all.slice(0,8).forEach(w=>content.appendChild(makeWord(w)));
+  }else reviewWords.forEach(w=>content.appendChild(makeWord(w)));
+ }
+ document.getElementById("quizTitle").textContent=s.type==="boss"?"🐉 Boss Battle":"🎯 Thử thách kiến thức";
+ document.getElementById("result").style.display="none";
+}
+function makeWord(w){
+ const div=document.createElement("div"); div.className="word";
+ const strong=document.createElement("strong"); strong.textContent=w[0]+" — "+w[1];
+ const speak=document.createElement("button"); speak.className="btn secondary";speak.textContent="🔊 Nghe";
+ speak.onclick=()=>say(w[0]);
+ const ex=document.createElement("div");ex.className="example";ex.textContent=w[2];
+ const tr=document.createElement("div");tr.className="translation";tr.textContent=w[3];
+ div.append(strong,speak,ex,tr);return div;
+}
+function say(text){
+ if(!("speechSynthesis" in window)){alert("Trình duyệt này chưa hỗ trợ đọc văn bản.");return;}
+ speechSynthesis.cancel();
+ const msg=new SpeechSynthesisUtterance(text);msg.lang="en-US";msg.rate=0.85;speechSynthesis.speak(msg);
+}
+function getWords(s){
+ if(s.type==="unit")return units[s.unit].words;
+ if(!s.range)return reviewWords;
+ return units.slice(s.range[0],s.range[1]).flatMap(u=>u.words);
+}
+function makeQuestions(s){
+ const words=getWords(s);
+ const count=s.type==="boss"?10:5;
+ let pool=[];
+ words.forEach(w=>pool.push({q:'Từ "'+w[0]+'" có nghĩa là gì?',choices:shuffle([w[1],...shuffle(words.filter(x=>x!==w).map(x=>x[1])).slice(0,3)]),answer:w[1]}));
+ words.forEach(w=>pool.push({q:'Từ tiếng Anh nào có nghĩa là "'+w[1]+'"?',choices:shuffle([w[0],...shuffle(words.filter(x=>x!==w).map(x=>x[0])).slice(0,3)]),answer:w[0]}));
+ return shuffle(pool).slice(0,Math.min(count,pool.length));
+}
+function shuffle(a){
+ const b=[...a];for(let i=b.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[b[i],b[j]]=[b[j],b[i]];}return b;
+}
+function startQuiz(){
+ questions=makeQuestions(currentStage);
+ qIndex=0;score=0;answered=false;
+ document.getElementById("lessonContent").style.display="none";
+ document.getElementById("lessonActions").style.display="none";
+ document.getElementById("quizArea").style.display="block";
+ document.getElementById("result").style.display="none";
+ showQuestion();
+}
+function showQuestion(){
+ answered=false;
+ const q=questions[qIndex];
+ document.getElementById("question").innerHTML="<p><b>Câu "+(qIndex+1)+"/"+questions.length+"</b></p><h3>"+q.q+"</h3>";
+ const opts=document.getElementById("options");opts.innerHTML="";
+ q.choices.forEach(c=>{
+  const b=document.createElement("button");b.className="option";b.textContent=c;b.onclick=()=>answer(c,b);opts.appendChild(b);
+ });
+ document.getElementById("feedback").textContent="";
+ document.getElementById("nextBtn").style.display="none";
+}
+function answer(choice,btn){
+ if(answered)return;answered=true;
+ const q=questions[qIndex];
+ document.querySelectorAll(".option").forEach(b=>{
+  b.disabled=true;if(b.textContent===q.answer)b.classList.add("correct");
+ });
+ if(choice===q.answer){
+  score++;document.getElementById("feedback").textContent="✨ Chính xác! +10 XP";
+  state.xp+=10;state.coins+=2;
+ }else{
+  btn.classList.add("wrong");document.getElementById("feedback").textContent="Chưa đúng. Đáp án: "+q.answer;
+ }
+ save();document.getElementById("nextBtn").style.display="inline-block";
+ document.getElementById("nextBtn").textContent=qIndex===questions.length-1?"Xem kết quả":"Câu tiếp theo →";
+}
+function nextQuestion(){
+ if(!answered)return;
+ qIndex++;
+ if(qIndex<questions.length){showQuestion();return;}
+ showResult();
+}
+function showResult(){
+ document.getElementById("question").innerHTML="";
+ document.getElementById("options").innerHTML="";
+ document.getElementById("feedback").textContent="";
+ document.getElementById("nextBtn").style.display="none";
+ const pct=Math.round(score/questions.length*100);
+ const boss=currentStage.type==="boss";
+ const won=!boss||pct>=70;
+ const res=document.getElementById("result");res.style.display="block";
+ if(won&&!state.done.includes(currentStage.id)){
+  state.done.push(currentStage.id);state.xp+=25;state.coins+=10;
+  const item=boss?(currentStage.id==="mid"?"Huy hiệu giữa kỳ 🛡️":"Vương miện chiến thắng 👑"):"Pha lê tri thức 💎";
+  state.inventory.push(item);save();renderMap();
+ }
+ res.innerHTML="<h2>"+(won?"🎉 Hoàn thành!":"🐲 Quái vật vẫn còn mạnh!")+"</h2><p>Bạn trả lời đúng <b>"+score+"/"+questions.length+"</b> câu ("+pct+"%).</p><p>"+(won?"Bạn nhận thêm 25 XP và 10 xu nếu đây là lần đầu hoàn thành chặng.":"Cần đạt ít nhất 70% để chiến thắng trận boss. Hãy ôn lại rồi thử lần nữa!")+"</p><button class='btn' onclick='goHome()'>Về bản đồ</button> <button class='btn secondary' onclick='openStage(currentStage)'>Ôn lại</button>";
+ if(boss&&!won)state.xp=Math.max(0,state.xp);
+ save();
+}
+function resetGame(){
+ if(!confirm("Bạn có chắc muốn xóa toàn bộ XP, xu và tiến trình không?"))return;
+ state={xp:0,coins:0,done:[],inventory:[]};save();renderMap();alert("Đã đặt lại tiến trình trên thiết bị này.");
+}
+renderMap();
+</script>
+</body>
+</html>
