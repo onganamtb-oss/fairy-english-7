@@ -3,6 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#35205f">
 <title>Fairy English 7 — Xứ sở Thần tiên</title>
 <style>
@@ -67,6 +69,11 @@ function nextQuestion(){if(!answered)return;qi++;if(qi<questions.length){showQue
 function showResult(){document.getElementById("question").innerHTML="";document.getElementById("options").innerHTML="";document.getElementById("feedback").textContent="";document.getElementById("next").style.display="none";let pct=Math.round(score/questions.length*100),boss=current.type==="boss",won=!boss||pct>=70;document.getElementById("bossHealth").style.width=(100-pct)+"%";let r=document.getElementById("result");r.style.display="block";if(won&&!state.done.includes(current.id)){state.done.push(current.id);state.xp+=25;state.coins+=10;let n=current.type==="unit"?current.unit+1:null;if(n&&!state.crystals.includes(n)){state.crystals.push(n);state.inventory.push("💎 Pha lê Unit "+n)}else if(boss){state.inventory.push(current.id.startsWith("mid")?"🛡️ Huy hiệu Đại chiến giữa kỳ":"👑 Vương miện giải cứu vương quốc")}else state.inventory.push("✨ Huy hiệu hoàn thành");persist()}r.innerHTML="<h2>"+(won?"🎉 Nhiệm vụ thành công!":"🐉 Trùm vẫn còn mạnh!")+"</h2><p>Bạn trả lời đúng <b>"+score+"/"+questions.length+"</b> câu ("+pct+"%).</p><p>"+(won?"Bạn đã nhận EXP và xu theo từng câu đúng. Lần đầu hoàn thành chặng nhận thêm phần thưởng.":"Cần đạt ít nhất 70% để thắng trận trùm. Hãy xem lại phần giải thích rồi thử lại.")+"</p><button class='btn' onclick='goHome()'>Về bản đồ</button> <button class='btn light' onclick='openStage(current)'>Ôn lại chặng này</button>";renderMap();persist()}
 function resetGame(){if(!confirm("Xóa toàn bộ EXP, xu, huy hiệu và tiến trình trên thiết bị này?"))return;state={xp:0,coins:0,done:[],inventory:[],wrong:{},crystals:[]};persist();goHome()}
 renderMap();
+</script>
+<script>
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+}
 </script>
 </body>
 </html>
