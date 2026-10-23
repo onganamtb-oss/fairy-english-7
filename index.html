@@ -22,6 +22,7 @@ main{max-width:1100px;margin:auto;padding:14px}.panel{padding:17px;margin:14px 0
 <main>
 <section id="home">
 <div class="hero"><h2>🌈 Hành trình khôi phục Xứ sở Thần tiên</h2><p>Chúa tể Bóng tối đã đánh cắp 12 viên pha lê tri thức. Học từ vựng, mở khóa phép thuật, ôn bài cũ và chiến thắng các trận đại chiến để cứu vương quốc!</p><a href="story.html" style="color:#fff4b9;font-weight:800">▶ Xem phim hoạt hình: The Lost Words</a></div>
+<div class="panel" id="installPanel"><h2>📲 Cài đặt và học ngoại tuyến</h2><p class="muted">Bạn có thể thêm Fairy English 7 vào màn hình chính trên trình duyệt hỗ trợ. Mở website ít nhất một lần khi có mạng để lưu các trang chính cho lần học ngoại tuyến.</p><button class="btn gold" id="installApp" type="button" style="display:none">📲 Cài đặt Fairy English 7</button><p class="muted">Trên iPhone/iPad, nếu không thấy nút cài đặt, hãy dùng Chia sẻ → Thêm vào màn hình chính trong Safari.</p></div>
 <div class="panel"><h2>🧭 Tiến trình phiêu lưu</h2><div class="bar"><div id="progress"></div></div><p class="muted" id="progressText">0 chặng hoàn thành</p><span class="badge">📚 Từ vựng</span><span class="badge">🔊 Phát âm</span><span class="badge">🧠 Ôn tập lũy tiến</span><span class="badge">🐉 Trận chiến</span></div>
 <div class="panel"><h2>🗺️ Bản đồ Xứ sở Thần tiên</h2><p class="muted">Mỗi vùng đất tương ứng với một Unit. Review giúp ôn kiến thức; các trận chiến lớn tổng hợp nhiều Unit. Các vùng đất được mở theo tiến trình để khuyến khích học tuần tự.</p><div class="map" id="map"></div></div>
 <div class="two"><div class="panel"><h2>🎒 Kho báu</h2><div id="inventory">Chưa có vật phẩm. Hãy hoàn thành nhiệm vụ đầu tiên!</div><p class="muted">Tiến trình được lưu trên trình duyệt của thiết bị này.</p><button class="btn light" onclick="resetGame()">Đặt lại tiến trình</button></div><div class="panel"><h2>📜 Luật phiêu lưu</h2><ul class="list"><li>Hoàn thành thử thách để nhận EXP và xu.</li><li>Unit mới yêu cầu vượt qua cổng ôn tập kiến thức cũ.</li><li>Trả lời sai sẽ được giải thích để học lại.</li><li>Trận chiến cần đạt ít nhất 70% để chiến thắng.</li></ul></div></div>
@@ -69,6 +70,30 @@ function nextQuestion(){if(!answered)return;qi++;if(qi<questions.length){showQue
 function showResult(){document.getElementById("question").innerHTML="";document.getElementById("options").innerHTML="";document.getElementById("feedback").textContent="";document.getElementById("next").style.display="none";let pct=Math.round(score/questions.length*100),boss=current.type==="boss",won=!boss||pct>=70;document.getElementById("bossHealth").style.width=(100-pct)+"%";let r=document.getElementById("result");r.style.display="block";if(won&&!state.done.includes(current.id)){state.done.push(current.id);state.xp+=25;state.coins+=10;let n=current.type==="unit"?current.unit+1:null;if(n&&!state.crystals.includes(n)){state.crystals.push(n);state.inventory.push("💎 Pha lê Unit "+n)}else if(boss){state.inventory.push(current.id.startsWith("mid")?"🛡️ Huy hiệu Đại chiến giữa kỳ":"👑 Vương miện giải cứu vương quốc")}else state.inventory.push("✨ Huy hiệu hoàn thành");persist()}r.innerHTML="<h2>"+(won?"🎉 Nhiệm vụ thành công!":"🐉 Trùm vẫn còn mạnh!")+"</h2><p>Bạn trả lời đúng <b>"+score+"/"+questions.length+"</b> câu ("+pct+"%).</p><p>"+(won?"Bạn đã nhận EXP và xu theo từng câu đúng. Lần đầu hoàn thành chặng nhận thêm phần thưởng.":"Cần đạt ít nhất 70% để thắng trận trùm. Hãy xem lại phần giải thích rồi thử lại.")+"</p><button class='btn' onclick='goHome()'>Về bản đồ</button> <button class='btn light' onclick='openStage(current)'>Ôn lại chặng này</button>";renderMap();persist()}
 function resetGame(){if(!confirm("Xóa toàn bộ EXP, xu, huy hiệu và tiến trình trên thiết bị này?"))return;state={xp:0,coins:0,done:[],inventory:[],wrong:{},crystals:[]};persist();goHome()}
 renderMap();
+</script>
+<script>
+(() => {
+  const installButton = document.getElementById("installApp");
+  if (!installButton) return;
+  let installPrompt = null;
+  window.addEventListener("beforeinstallprompt", event => {
+    event.preventDefault();
+    installPrompt = event;
+    installButton.style.display = "inline-block";
+  });
+  installButton.addEventListener("click", async () => {
+    if (!installPrompt) return;
+    installPrompt.prompt();
+    await installPrompt.userChoice;
+    installPrompt = null;
+    installButton.style.display = "none";
+  });
+  window.addEventListener("appinstalled", () => {
+    installButton.textContent = "✓ Fairy English 7 đã được cài đặt";
+    installButton.style.display = "inline-block";
+    installButton.disabled = true;
+  });
+})();
 </script>
 <script>
 if ("serviceWorker" in navigator && location.protocol !== "file:") {
