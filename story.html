@@ -4,6 +4,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="manifest" href="./manifest.webmanifest">
+<link rel="icon" href="./icon.svg" type="image/svg+xml">
 <meta name="theme-color" content="#17143f">
 <title>Fairy English 7 | The Lost Words</title>
 
@@ -893,6 +895,11 @@ document.querySelectorAll("[data-answer]").forEach(button => {
 // Có thể bật tính năng đọc lời thoại bằng nút riêng nếu muốn.
 buildSceneList();
 renderScene(0);
+</script>
+<script>
+if ("serviceWorker" in navigator && location.protocol !== "file:") {
+  window.addEventListener("load", () => navigator.serviceWorker.register("./sw.js").catch(() => {}));
+}
 </script>
 </body>
 </html>
