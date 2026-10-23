@@ -12,8 +12,8 @@ self.addEventListener("fetch", event => {
   const request = event.request;
   if (request.method !== "GET" || new URL(request.url).origin !== self.location.origin) return;
   if (request.mode === "navigate") {
-    event.respondWith(fetch(request).then(response => {
-      if (response && response.ok) caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()));
+    event.respondWith(fetch(request).then(async response => {
+      if (response && response.ok) await (await caches.open(CACHE_NAME)).put(request, response.clone());
       return response;
     }).catch(async () => {
       const cache = await caches.open(CACHE_NAME);
@@ -25,8 +25,10 @@ self.addEventListener("fetch", event => {
     }));
     return;
   }
-  event.respondWith(caches.match(request).then(cached => cached || fetch(request).then(response => {
-    if (response && response.ok) caches.open(CACHE_NAME).then(cache => cache.put(request, response.clone()));
+  event.respondWith(caches.match(request).then(async cached => {
+    if (cached) return cached;
+    const response = await fetch(request);
+    if (response && response.ok) await (await caches.open(CACHE_NAME)).put(request, response.clone());
     return response;
-  })));
+  }));
 });
