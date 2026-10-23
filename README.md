@@ -8,6 +8,10 @@ Website học tiếng Anh lớp 7 theo định hướng Global Success, thiết 
 - Unit 1: https://onganamtb-oss.github.io/fairy-english-7/unit1.html
 - Unit 2–12 dùng chung trang bài học: https://onganamtb-oss.github.io/fairy-english-7/unit.html?u=2 (thay số cuối bằng Unit cần học, từ 2 đến 12).
 
+## Cài đặt và học ngoại tuyến
+- Website có manifest, biểu tượng và service worker để hỗ trợ cài đặt như ứng dụng web trên trình duyệt tương thích.
+- Hãy mở website khi có mạng ít nhất một lần để các trang chính được lưu vào bộ nhớ đệm. Khả năng cài đặt và ngoại tuyến phụ thuộc vào trình duyệt/thiết bị; chưa thay thế hoàn toàn một ứng dụng native.
+
 ## Cách chơi
 1. Mở bản đồ và chọn vùng đất đang mở khóa.
 2. Học từ vựng, nghe phát âm, đọc câu chuyện và ôn ngữ pháp.
