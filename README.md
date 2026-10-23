@@ -28,5 +28,5 @@ Các câu chuyện, ví dụ và câu hỏi là nội dung học tập bổ tr�
 - Chạy kiểm tra sinh 10 câu hỏi và kiểm tra chỉ số đáp án cho cả 12 Unit.
 
 ## Hạn chế hiện tại
-- Minh họa nhân vật trong các bài học dùng emoji và hiệu ứng CSS; chưa phải phim hoạt hình chibi dạng video đầy đủ.
+- Các bài học Unit 1–12 hiện có minh họa chibi dạng SVG với chuyển động CSS. Đây là hoạt hình vector đơn giản, chưa phải video hoạt hình dựng sẵn với chuyển động nhân vật phức tạp.
 - Chưa thực hiện kiểm thử trực tiếp trên mọi trình duyệt/điện thoại; sau khi GitHub Pages cập nhật, nên mở website và thử một lượt từ Unit 1 đến các cổng ôn tập.
